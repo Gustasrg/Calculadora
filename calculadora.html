@@ -1,0 +1,107 @@
+<html lang="pt-Br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="fundo">
+        <h1 class="nome">Gustavo Gomes</h1>
+        <audio id="som" src="./Som/button2.wav" preload="auto"></audio>
+        <div class="calculadora">
+            <h1>Calculadora</h1>
+            <p id="resultado"></p>
+            <table>
+                <tr>
+                    <td><button class="botao" onclick="clean()">C</button></td>
+                    <td><button class="botao" onclick="back()"><</button></td>
+                    <td><button class="botao" onclick="insert('/')">/</button></td>
+                    <td><button class="botao" onclick="insert('*')">*</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('7')">7</button></td>
+                    <td><button class="botao" onclick="insert('8')">8</button></td>
+                    <td><button class="botao" onclick="insert('9')">9</button></td>
+                    <td><button class="botao" onclick="insert('-')">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('4')">4</button></td>
+                    <td><button class="botao" onclick="insert('5')">5</button></td>
+                    <td><button class="botao" onclick="insert('6')">6</button></td>
+                    <td><button class="botao" onclick="insert('+')">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('1')">1</button></td>
+                    <td><button class="botao" onclick="insert('2')">2</button></td>
+                    <td><button class="botao" onclick="insert('3')">3</button></td>
+                    <td rowspan="2"><button class="botao igual" onclick="calcular()">=</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button class="botao zero" onclick="insert('0')">0</button></td>
+                    <td><button class="botao" onclick="insert('.')">.</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        function insert(num)
+        {
+            const resultado = document.getElementById('resultado');
+            if (resultado.innerHTML.length < 50){
+                resultado.innerHTML += num;
+                ajustarTamanhoTexto();
+                tocarSom();
+            }
+        }
+        function clean()
+        {
+           const resultado = document.getElementById('resultado');
+           resultado.innerHTML = "";
+           resultado.style.fontSize = "30px";
+           tocarSom();
+        }
+        function back()
+        {
+            var resultado = document.getElementById('resultado').innerHTML;
+            document.getElementById('resultado').innerHTML = resultado.substring(0, resultado.length -1);
+            tocarSom();
+        }
+
+        function ajustarTamanhoTexto(){
+            const resultado = document.getElementById('resultado');
+            let tamanho = 40;
+
+            while (resultado.scrollWidth > resultado.clientWidth && tamanho > 12){
+                tamanho--;
+                resultado.style.fontSize = `${tamanho}px`;
+            }
+        }
+
+        function calcular()
+        {
+            const resultado = document.getElementById('resultado');
+            if(resultado.innerHTML)
+            {
+                let resposta = eval(resultado.innerHTML);
+                resposta = Number(resposta).toFixed(5);
+                resposta = Number(resposta).toLocaleString("pt-BR");
+                if (resposta.length > 14){
+                    resposta = resposta.slice(0,20) + "...";
+                }
+                resultado.innerHTML = resposta;
+                ajustarTamanhoTexto();
+                tocarSom();
+            }
+            else{
+                resultado.innerHTML = "...";
+            }
+        }
+        function tocarSom(){
+            const som = document.getElementById("som");
+            som.currentTime = 0;
+            som.play();
+        }
+    </script>
+</body>
+</html>
